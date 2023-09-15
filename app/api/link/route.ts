@@ -4,17 +4,26 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { longLink, password, expiresAt } = await req.json();
+    const { longLink, password, expiresAt, shortValue } = await req.json();
     const profile = await currentProfile();
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    console.log("[SERVERS_POST]", profile.id);
+    const shortValueTaken = await db.link.findUnique({
+      where: {
+        shortValue,
+      },
+    });
+
+    if (shortValueTaken) {
+      return new NextResponse("Short value already taken", { status: 400 });
+    }
 
     const link = await db.link.create({
       data: {
+        shortValue,
         longLink,
         password,
         expiresAt,
