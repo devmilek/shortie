@@ -24,15 +24,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { HelpCircle, Link2, RefreshCcw } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
 import BasicTooltip from "../ui/basic-tooltip";
-import { Link } from "@prisma/client";
+import { Link, Profile } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/use-modal-store";
+import { LinkWithProfile } from "@/types";
+import { useLastCreatedLink } from "@/hooks/use-last-created-link";
+import { Icons } from "../icons";
 
 interface CreateLinkModalProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
   longLink?: string;
   createdLink?: any | undefined;
   setCreatedLink?: (createdLink: any | undefined) => void;
@@ -50,14 +53,15 @@ const formSchema = z.object({
 });
 
 const CreateLinkModal = ({
-  isOpen,
-  setIsOpen,
   longLink,
   createdLink,
   setCreatedLink,
 }: CreateLinkModalProps) => {
+  const { isOpen, onClose, type, data } = useModal();
   const { toast } = useToast();
   const origin = useOrigin();
+  const router = useRouter();
+  const { setLink } = useLastCreatedLink();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,21 +76,26 @@ const CreateLinkModal = ({
     form.setValue("longLink", longLink);
   }
 
+  const isModalOpen = isOpen && type === "createLinkModal";
+
   const isLoading = form.formState.isSubmitting;
 
   async function formSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const link = await axios.post("/api/link", values);
-      setIsOpen(false);
-      if (setCreatedLink) {
-        setCreatedLink(link);
-      }
+      const linkResponse: AxiosResponse<LinkWithProfile> = await axios.post(
+        "/api/link",
+        values
+      );
+      onClose();
+
+      setLink(linkResponse.data);
+
       form.reset();
       toast({
         title: "Link created",
         description: "Your link is succesfully created and active",
       });
-      console.log(link);
+      router.refresh();
     } catch (e: any) {
       console.log(e.code);
       if (e.response!.status === 400) {
@@ -117,13 +126,13 @@ const CreateLinkModal = ({
 
   return (
     <Dialog
-      open={isOpen}
+      open={isModalOpen}
       onOpenChange={(open) => {
         form.reset();
-        setIsOpen(open);
+        onClose();
       }}
     >
-      <DialogContent>
+      <DialogContent className="border-border">
         <DialogHeader>
           <DialogTitle>Create short link</DialogTitle>
           <DialogDescription>
@@ -156,7 +165,10 @@ const CreateLinkModal = ({
                         variant="secondary"
                         size="icon"
                         disabled={isLoading}
-                        onClick={setRandomShortValue}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setRandomShortValue();
+                        }}
                       >
                         <RefreshCcw className="w-4 h-4" />
                       </Button>
@@ -241,12 +253,15 @@ const CreateLinkModal = ({
             variant="outline"
             disabled={isLoading}
             onClick={() => {
-              setIsOpen(false);
+              onClose();
             }}
           >
             Cancel
           </Button>
           <Button onClick={form.handleSubmit(formSubmit)} disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="h-4 w-4 mr-2 animate-spin" />
+            )}{" "}
             Create link
           </Button>
         </DialogFooter>
@@ -256,6 +271,3 @@ const CreateLinkModal = ({
 };
 
 export default CreateLinkModal;
-function generateShortValue() {
-  throw new Error("Function not implemented.");
-}

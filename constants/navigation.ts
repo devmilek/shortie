@@ -4,16 +4,19 @@ export const SidebarNavItems = [
   {
     label: "Dashboard",
     icon: Home,
-    href: "/dashboard",
+    href: "/app/dashboard",
+    isPro: false,
   },
   {
     label: "Statistics",
     icon: PieChart,
-    href: "/statistics",
+    href: "/app/statistics",
+    isPro: true,
   },
   {
     label: "Links",
     icon: Link2,
-    href: "/links",
+    href: "/app/links",
+    isPro: false,
   },
 ];

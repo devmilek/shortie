@@ -5,28 +5,24 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useOrigin } from "@/hooks/use-origin";
-import { Link2 } from "lucide-react";
+import { AlertTriangle, Calendar, Link2, Lock, Pen, Trash } from "lucide-react";
 import CreateLinkModal from "../modals/create-link-modal";
+import QrCard from "./qr-card";
+import { formatDateString } from "@/lib/format-date";
+import Link from "next/link";
+import axios from "axios";
+import { Link as LinkType, Profile } from "@prisma/client";
+import LinkDetails from "./link-details";
+import { useModal } from "@/hooks/use-modal-store";
+import { useLastCreatedLink } from "@/hooks/use-last-created-link";
 
-const CreateLink = () => {
-  const [createdLink, setCreatedLink] = useState<any | undefined>();
+const CreateLink = ({ className }: { className?: string }) => {
   const [longLink, setLongLink] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
-
-  const origin = useOrigin();
-
-  const onCopy = () => {
-    navigator.clipboard.writeText(origin + "/l/" + createdLink.data.shortValue);
-    setIsCopied(true);
-
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 1000);
-  };
+  const { onOpen } = useModal();
+  const { link, setLink } = useLastCreatedLink();
 
   return (
-    <div>
+    <div className={className}>
       <h2 className="text-xl font-bold">Create new link</h2>
       <p className="text-sm text-muted-foreground mt-1">
         Create, short and manage your links
@@ -44,46 +40,16 @@ const CreateLink = () => {
           className="whitespace-nowrap"
           onClick={() => {
             setLongLink("");
-            setIsOpen(true);
+            onOpen("createLinkModal");
           }}
         >
           Create link
         </Button>
       </div>
-      <CreateLinkModal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        longLink={longLink}
-        setCreatedLink={setCreatedLink}
-        createdLink={createdLink}
-      />
-      {createdLink && (
+      {link && (
         <>
           <Separator className="my-8" />
-          <div className="p-6 bg-white rounded-xl border space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-bold">Your link</h2>
-              <Button variant="secondary" onClick={onCopy} disabled={isCopied}>
-                Copy
-              </Button>
-            </div>
-            <div className="bg-gradient-to-tr text-center flex flex-col justify-center items-center from-blue-600 to-blue-900 p-7 rounded-lg text-white">
-              <h6 className="text-xs font-medium text-white/70">Link by:</h6>
-              <h3 className="text-lg font-bold">
-                {createdLink.data.profile.name}
-              </h3>
-              <p className="text-xs text-white/40 mt-3 line-clamp-1">
-                {createdLink.data.longLink}
-              </p>
-            </div>
-            <div className="py-2 px-3 flex bg-white border rounded-lg">
-              <Link2 className="h-5 w-5 mr-2 flex-shrink-0" />
-              <p className="text-sm font-medium text-foreground/70 line-clamp-1">
-                <span className="text-primary">{origin}/l/</span>
-                {createdLink.data.shortValue}
-              </p>
-            </div>
-          </div>
+          <LinkDetails link={link} />
         </>
       )}
     </div>

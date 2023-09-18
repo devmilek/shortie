@@ -4,11 +4,14 @@ import { LinkIcon, Menu, Settings } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import DashboardSidebarMobile from "./dashboard-sidebar-mobile";
+import { useModal } from "@/hooks/use-modal-store";
+import { ThemeToggle } from "../theme-toggle";
 
 const DashboardNavbar = () => {
+  const { onOpen } = useModal();
   return (
-    <div className="md:pl-72 bg-white fixed inset-x-0 w-full z-40">
-      <header className="flex justify-between md:justify-end items-center border-b h-14 px-8">
+    <div className="md:pl-72 bg-background top-0 fixed inset-x-0 w-full z-40">
+      <header className="flex justify-between md:justify-end items-center border-b h-14 px-8 border-border">
         <div className="flex items-center space-x-4 md:hidden">
           <DashboardSidebarMobile />
           <Link href={"/dashboard"} className="items-center space-x-3 flex">
@@ -17,8 +20,14 @@ const DashboardNavbar = () => {
           </Link>
         </div>
         <nav className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon">
-            <Settings />
+          <ThemeToggle />
+          <Button
+            variant="outline"
+            onClick={() => {
+              onOpen("createLinkModal");
+            }}
+          >
+            Create link
           </Button>
           <UserButton showName afterSignOutUrl="/" />
         </nav>
