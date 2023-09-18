@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "../ui/button";
 import QRCode from "qrcode.react";
+import { Button } from "./ui/button";
 
 interface QrCardProps {
   shortValue: string;

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   Dialog,
@@ -127,7 +129,7 @@ const CreateLinkModal = ({
   return (
     <Dialog
       open={isModalOpen}
-      onOpenChange={(open) => {
+      onOpenChange={() => {
         form.reset();
         onClose();
       }}

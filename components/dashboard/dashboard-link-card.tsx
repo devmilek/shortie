@@ -8,7 +8,7 @@ import { formatDateString } from "@/lib/format-date";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import LinkDetails from "./link-details";
+import LinkDetails from "../link-details";
 import { ScrollArea } from "../ui/scroll-area";
 
 const DashboardLinkCard = ({

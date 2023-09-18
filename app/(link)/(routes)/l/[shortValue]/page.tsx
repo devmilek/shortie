@@ -1,8 +1,11 @@
 import { useOrigin } from "@/hooks/use-origin";
 import { db } from "@/lib/db";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 import axios from "axios";
+import Link from "next/link";
+import { LinkIcon } from "lucide-react";
+import PasswordLink from "@/components/password-link";
 
 interface PageProps {
   params: {
@@ -18,7 +21,7 @@ const Page = async ({ params }: PageProps) => {
   });
 
   if (!link) {
-    return <div>No i klops</div>;
+    return notFound();
   }
 
   const visitor = await db.visitor.create({
@@ -26,6 +29,16 @@ const Page = async ({ params }: PageProps) => {
       LinkId: link.id,
     },
   });
+
+  const now = new Date();
+
+  if (link.expiresAt && link.expiresAt < now) {
+    return notFound();
+  }
+
+  if (link.password) {
+    return <PasswordLink longLink={link.longLink} password={link.password} />;
+  }
 
   // if (link) {
   //   return redirect(link.longLink);

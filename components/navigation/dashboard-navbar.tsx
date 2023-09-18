@@ -8,7 +8,6 @@ import { useModal } from "@/hooks/use-modal-store";
 import { ThemeToggle } from "../theme-toggle";
 
 const DashboardNavbar = () => {
-  const { onOpen } = useModal();
   return (
     <div className="md:pl-72 bg-background top-0 fixed inset-x-0 w-full z-40">
       <header className="flex justify-between md:justify-end items-center border-b h-14 px-8 border-border">
@@ -21,14 +20,7 @@ const DashboardNavbar = () => {
         </div>
         <nav className="flex items-center space-x-4">
           <ThemeToggle />
-          <Button
-            variant="outline"
-            onClick={() => {
-              onOpen("createLinkModal");
-            }}
-          >
-            Create link
-          </Button>
+          <Button variant="outline">Create link</Button>
           <UserButton showName afterSignOutUrl="/" />
         </nav>
       </header>

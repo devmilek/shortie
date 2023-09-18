@@ -13,23 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  ChevronDown,
-  Info,
-  Lock,
-  MoreHorizontal,
-  Unlock,
-} from "lucide-react";
+import { ArrowUpDown, ChevronDown, Info, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -43,9 +33,6 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@prisma/client";
 import { formatDateString } from "@/lib/format-date";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import LinkDetails from "../dashboard/link-details";
-import { ScrollArea } from "../ui/scroll-area";
 import { useModal } from "@/hooks/use-modal-store";
 
 export const columns: ColumnDef<
@@ -98,13 +85,15 @@ export const columns: ColumnDef<
   {
     accessorKey: "expiresAt",
     header: "Expires at",
-    cell: ({ row }) => (
-      <div className="max-w-[160px] truncate">
-        {row.getValue("expiresAt")
-          ? formatDateString(row.getValue("expiresAt"))
-          : "Lifetime"}
-      </div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <div className="max-w-[160px] truncate">
+          {row.getValue("expiresAt")
+            ? formatDateString(row.getValue("expiresAt"))
+            : "Lifetime"}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "clicks",

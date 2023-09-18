@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { AlertTriangle, Calendar, Link2, Lock, Trash } from "lucide-react";
 import QrCard from "./qr-card";
 import Link from "next/link";
@@ -10,7 +12,7 @@ import { Link as LinkType, Profile } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { LinkWithProfile } from "@/types";
 import { useLastCreatedLink } from "@/hooks/use-last-created-link";
-import { Icons } from "../icons";
+import { Icons } from "./icons";
 import { useModal } from "@/hooks/use-modal-store";
 
 interface LinkDetailsProps {
@@ -52,7 +54,7 @@ const LinkDetails = ({ link, className }: LinkDetailsProps) => {
         </div>
         <div className="py-2 px-3 flex bg-background border-border border rounded-lg">
           <Link2 className="h-5 w-5 mr-2 flex-shrink-0" />
-          <p className="text-sm font-medium text-foreground/70 line-clamp-1">
+          <p className="text-sm font-medium text-foreground/70 line-clamp-1 max-w-[230px] ">
             <span className="text-primary">{origin}/l/</span>
             {link.shortValue}
           </p>

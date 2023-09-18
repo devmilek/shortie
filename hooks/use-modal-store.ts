@@ -8,7 +8,7 @@ export type ModalType =
   | "deleteLinkModal";
 
 interface ModalData {
-  link?: Link | LinkWithProfile;
+  link?: LinkWithProfile;
   longLink?: string;
   //   channel?: Channel;
   //   channelType?: ChannelType;

@@ -15,8 +15,6 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const page = async () => {
-  const initProfile = initialProfile();
-
   const profile = await currentProfile();
 
   if (!profile) {
@@ -40,6 +38,9 @@ const page = async () => {
   const mostPopularLinks = await db.link.findMany({
     where: {
       profileId: profile.id,
+      expiresAt: {
+        gte: new Date(),
+      },
     },
     orderBy: {
       visitors: {

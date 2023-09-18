@@ -1,10 +1,8 @@
 "use client";
 
-import { currentProfile } from "@/lib/current-profile";
-import { db } from "@/lib/db";
 import { sortClicksByDay } from "@/lib/sortClicksByDay";
 import { Visitor } from "@prisma/client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Bar,
   BarChart,
@@ -16,10 +14,6 @@ import {
 } from "recharts";
 import ChartTooltip from "./chart-tooltip";
 import { ChartCursor } from "./chart-cursor";
-
-type DataItem = {
-  created_at: Date;
-};
 
 const DashboardChart = ({ clicks }: { clicks: Visitor[] }) => {
   const filteredClicks = sortClicksByDay(clicks);

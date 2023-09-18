@@ -1,5 +1,5 @@
 import { LucideProps } from "lucide-react";
-import React, { ComponentType, ReactNode } from "react";
+import React, { ComponentType } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface DashboardStatsCardProps {
