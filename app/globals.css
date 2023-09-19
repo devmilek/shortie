@@ -14,6 +14,15 @@ html, body, :root {
   @apply text-foreground
 }
 
+.landing-container {
+  @apply max-w-7xl mx-auto px-8 py-24
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
 /* Loader */
 
 .lds-ripple {
