@@ -30,24 +30,3 @@ export async function DELETE(
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
-
-export async function GET({ params }: { params: { shortValue: string } }) {
-  try {
-    if (!params.shortValue) {
-      return new NextResponse("Short value missing", { status: 400 });
-    }
-
-    const link = await db.link.findUnique({
-      where: {
-        shortValue: params.shortValue,
-      },
-    });
-
-    // console.log(req.geo?.city);
-
-    return NextResponse.json(link);
-  } catch (error) {
-    console.log("[MEMBER_ID_DELETE]", error);
-    return new NextResponse("Internal Error", { status: 500 });
-  }
-}
