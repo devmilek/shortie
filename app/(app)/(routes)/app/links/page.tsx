@@ -1,5 +1,4 @@
 import * as React from "react";
-import { columns } from "@/components/links/columns";
 import { DataTable } from "@/components/links/data-table";
 import { currentProfile } from "@/lib/current-profile";
 import { redirect } from "next/navigation";
