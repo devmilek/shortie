@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const { linkId } = await req.json();
 
-    // const visitor = req.;
+    const visitor = linkId;
 
     // console.log("[GEOLOCATION OF USER]", req.geo?.city);
 

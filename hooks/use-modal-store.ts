@@ -8,12 +8,14 @@ export type ModalType =
   | "deleteLinkModal";
 
 interface ModalData {
-  link?: LinkWithProfile;
+  link?:
+    | LinkWithProfile
+    | (LinkWithProfile & {
+        _count: {
+          visitors: string;
+        };
+      });
   longLink?: string;
-  //   channel?: Channel;
-  //   channelType?: ChannelType;
-  //   apiUrl?: string;
-  //   query?: Record<string, any>;
 }
 
 interface ModalStore {

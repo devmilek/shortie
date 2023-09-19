@@ -34,6 +34,7 @@ import {
 import { Link } from "@prisma/client";
 import { formatDateString } from "@/lib/format-date";
 import { useModal } from "@/hooks/use-modal-store";
+import { LinkWithProfile } from "@/types";
 
 export const columns: ColumnDef<
   Link & {
@@ -131,6 +132,7 @@ export const columns: ColumnDef<
           variant="secondary"
           size="icon"
           onClick={() => {
+            // @ts-ignore
             onOpen("linkDetailsSheet", { link });
           }}
         >
