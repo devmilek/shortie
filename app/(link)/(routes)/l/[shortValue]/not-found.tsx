@@ -11,7 +11,7 @@ const NotFound = () => {
       <div className="text-center">
         <h1 className="text-6xl font-bold">We lost this page</h1>
         <p className="text-muted-foreground mt-4">
-          The page you are looking for doesn't exist or has been moved.
+          The page you are looking for doesnt exist or has been moved.
         </p>
         <div className="mt-4 space-x-2">
           <Button asChild variant="secondary">

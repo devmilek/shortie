@@ -19,7 +19,7 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
       <Button className="w-full my-8">{plan.button}</Button>
       <div className="space-y-3">
         {plan.features.map((feature) => (
-          <div className="flex items-center space-x-2">
+          <div key={feature} className="flex items-center space-x-2">
             <Check className="text-blue-700" />
             <span className="text-muted-foreground">{feature}</span>
           </div>

@@ -22,6 +22,7 @@ const DashboardSidebar = () => {
         <div className="space-y-2">
           {SidebarNavItems.map((item) => (
             <Button
+              key={item.href}
               className="w-full justify-start"
               size="lg"
               variant={item.href === pathname ? "default" : "ghost"}

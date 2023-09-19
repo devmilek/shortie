@@ -33,6 +33,7 @@ const Footer = () => {
           <div className="space-x-3">
             {links.map((item) => (
               <Link
+                key={item.href}
                 className="text-background/40 dark:text-muted-foreground hover:text-background/60 hover:underline transition hover:underline-offset-2"
                 href={item.href}
               >

@@ -91,7 +91,7 @@ const page = async () => {
         {/* Display popular links */}
         <div className="space-y-4 mt-4 w-full">
           {mostPopularLinks.map((link) => (
-            <DashboardLinkCard link={link} />
+            <DashboardLinkCard key={link.id} link={link} />
           ))}
         </div>
       </section>
