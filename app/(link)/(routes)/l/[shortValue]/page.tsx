@@ -40,11 +40,9 @@ const Page = async ({ params }: PageProps) => {
     return <PasswordLink longLink={link.longLink} password={link.password} />;
   }
 
-  // if (link) {
-  //   return redirect(link.longLink);
-  // }
-
-  // const link = await axios.get("/api/link/" + params.shortValue);
+  if (link) {
+    return redirect(link.longLink);
+  }
 
   return (
     <div>
