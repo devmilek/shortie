@@ -25,6 +25,7 @@
 - Access Shortie from any web browser or device.
 - Protect links with password
 - Set links expiration date
+- Generate QR codes for shortned links
 
 ## Todo
 
