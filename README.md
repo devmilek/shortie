@@ -12,6 +12,9 @@
   Simple and user-friendly web application designed to shorten long URLs, making them easier to share and manage.
 </p>
 
+[!WARNING]
+Still in development
+
 ## Live version
 
 [Shortie - Tiny links, big resoults!](https://shortie-livid.vercel.app/)
