@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://tailwindcss.com" target="_blank">
+  <a href="" target="_blank">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/devmilek/shortie/main/HEAD/logo-dark.svg">
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/devmilek/shortie/main/HEAD/logo-light.svg">
