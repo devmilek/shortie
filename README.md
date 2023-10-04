@@ -12,8 +12,8 @@
   Simple and user-friendly web application designed to shorten long URLs, making them easier to share and manage.
 </p>
 
-[!WARNING]
-Still in development
+> **Warning**
+> Still in development
 
 ## Live version
 
