@@ -24,7 +24,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <DashboardNavbar />
-      <DashboardSidebar />
+      <DashboardSidebar className="hidden md:flex" />
       <div className="md:pl-72 min-h-full max-w-full">{children}</div>
       <ModalProvider />
       <Toaster />

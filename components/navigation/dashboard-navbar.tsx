@@ -1,10 +1,9 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { LinkIcon, Menu, Settings } from "lucide-react";
+import { LinkIcon } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import DashboardSidebarMobile from "./dashboard-sidebar-mobile";
-import { useModal } from "@/hooks/use-modal-store";
 import { ThemeToggle } from "../theme-toggle";
 
 const DashboardNavbar = () => {

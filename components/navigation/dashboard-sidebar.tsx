@@ -9,11 +9,17 @@ import { usePathname } from "next/navigation";
 import { Separator } from "../ui/separator";
 import { SignOutButton } from "@clerk/nextjs";
 import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({ className }: { className?: string }) => {
   const pathname = usePathname();
   return (
-    <aside className="w-72 border-r h-full fixed hidden md:flex flex-col inset-y-0 z-50 bg-background border-border px-6 py-8">
+    <aside
+      className={cn(
+        "w-72 border-r h-full fixed flex-col inset-y-0 z-50 bg-background border-border px-6 py-8",
+        className
+      )}
+    >
       <Link href={"/dashboard"} className="flex items-center space-x-3 mb-8">
         <LinkIcon />
         <span className="text-xl font-black">SHORTIE</span>
