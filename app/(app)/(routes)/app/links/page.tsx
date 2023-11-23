@@ -1,17 +1,18 @@
 import * as React from "react";
 import { DataTable } from "@/components/links/data-table";
-import { currentProfile } from "@/lib/current-profile";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 
 export default async function Page() {
-  const profile = await currentProfile();
-  if (!profile) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
     redirect("/");
   }
   const links = await db.link.findMany({
     where: {
-      profileId: profile.id,
+      profileId: session.user.id,
     },
     include: {
       _count: {

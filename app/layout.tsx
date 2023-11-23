@@ -1,8 +1,10 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Toaster, toast } from "sonner";
+import SessionProvider from "@/components/providers/session-provider";
+import ToasterProvider from "@/components/providers/toaster-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,9 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className="bg-background">
+    <html lang="en">
+      <body className="bg-background">
+        <SessionProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -37,9 +39,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <ToasterProvider />
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }

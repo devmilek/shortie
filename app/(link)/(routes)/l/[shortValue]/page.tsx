@@ -1,10 +1,6 @@
-import { useOrigin } from "@/hooks/use-origin";
 import { db } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
-import axios from "axios";
-import Link from "next/link";
-import { LinkIcon } from "lucide-react";
 import PasswordLink from "@/components/password-link";
 
 interface PageProps {

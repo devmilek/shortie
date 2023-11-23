@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 
 export async function DELETE(
   req: Request,
   { params }: { params: { shortValue: string } }
 ) {
   try {
-    const profile = await currentProfile();
+    const session = await getServerSession(authOptions);
 
-    if (!profile) {
+    if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -21,6 +21,7 @@ export async function DELETE(
     const link = await db.link.delete({
       where: {
         shortValue: params.shortValue,
+        profileId: session.user.id,
       },
     });
 

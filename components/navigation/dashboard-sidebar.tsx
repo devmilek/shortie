@@ -1,18 +1,21 @@
 "use client";
 
-import { SidebarNavItems } from "@/constants/navigation";
+import { sidebarNavItems } from "@/constants/navigation";
 import { LinkIcon, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Separator } from "../ui/separator";
-import { SignOutButton } from "@clerk/nextjs";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { handleSignOut } from "@/lib/sign-out";
 
 const DashboardSidebar = ({ className }: { className?: string }) => {
   const pathname = usePathname();
+  const router = useRouter();
+
   return (
     <aside
       className={cn(
@@ -20,13 +23,13 @@ const DashboardSidebar = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <Link href={"/dashboard"} className="flex items-center space-x-3 mb-8">
+      <Link href={"/"} className="flex items-center space-x-3 mb-8">
         <LinkIcon />
         <span className="text-xl font-black">SHORTIE</span>
       </Link>
       <nav className="space-y-5 flex-1">
         <div className="space-y-2">
-          {SidebarNavItems.map((item) => (
+          {sidebarNavItems.map((item) => (
             <Button
               key={item.href}
               className="w-full justify-start"
@@ -59,12 +62,17 @@ const DashboardSidebar = ({ className }: { className?: string }) => {
           </Link>
         </Button>
       </nav>
-      <SignOutButton>
-        <Button className="w-full justify-start" variant="secondary" size="lg">
-          <LogOut className="h-4 w-4 mr-2" />
-          Log out
-        </Button>
-      </SignOutButton>
+      <Button
+        className="w-full justify-start"
+        variant="secondary"
+        size="lg"
+        onClick={() => {
+          handleSignOut();
+        }}
+      >
+        <LogOut className="h-4 w-4 mr-2" />
+        Log out
+      </Button>
     </aside>
   );
 };

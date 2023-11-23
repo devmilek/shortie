@@ -2,9 +2,11 @@ import React, { ReactNode } from "react";
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="h-full w-full flex items-center justify-center bg-gradient-to-tr from-violet-600 via-indigo-700 to-blue-700">
-      {children}
-    </div>
+    <section className="flex items-center justify-center h-full w-full">
+      <div className="max-w-sm w-full flex flex-col items-center">
+        {children}
+      </div>
+    </section>
   );
 };
 

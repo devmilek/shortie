@@ -25,22 +25,19 @@ import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { HelpCircle, Link2, RefreshCcw } from "lucide-react";
+import { HelpCircle, Link2, Loader2, RefreshCcw } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
 import BasicTooltip from "../ui/basic-tooltip";
-import { Link, Profile } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 import { LinkWithProfile } from "@/types";
 import { useLastCreatedLink } from "@/hooks/use-last-created-link";
 import { Icons } from "../icons";
+import { toast } from "sonner";
 
 interface CreateLinkModalProps {
   longLink?: string;
-  createdLink?: any | undefined;
-  setCreatedLink?: (createdLink: any | undefined) => void;
 }
 
 const formSchema = z.object({
@@ -54,13 +51,8 @@ const formSchema = z.object({
   expiresAt: z.date().optional(),
 });
 
-const CreateLinkModal = ({
-  longLink,
-  createdLink,
-  setCreatedLink,
-}: CreateLinkModalProps) => {
-  const { isOpen, onClose, type, data } = useModal();
-  const { toast } = useToast();
+const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
+  const { isOpen, onClose, type } = useModal();
   const origin = useOrigin();
   const router = useRouter();
   const { setLink } = useLastCreatedLink();
@@ -68,15 +60,11 @@ const CreateLinkModal = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      longLink: "",
+      longLink: longLink || "",
       password: undefined,
       expiresAt: undefined,
     },
   });
-
-  if (longLink) {
-    form.setValue("longLink", longLink);
-  }
 
   const isModalOpen = isOpen && type === "createLinkModal";
 
@@ -84,27 +72,19 @@ const CreateLinkModal = ({
 
   async function formSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const linkResponse: AxiosResponse<LinkWithProfile> = await axios.post(
-        "/api/link",
-        values
-      );
-      onClose();
-
+      const linkResponse = await axios.post("/api/link", values);
       setLink(linkResponse.data);
-
+      onClose();
       form.reset();
-      toast({
-        title: "Link created",
+      toast.success("Link created", {
         description: "Your link is succesfully created and active",
       });
       router.refresh();
     } catch (e: any) {
       console.log(e.code);
       if (e.response!.status === 400) {
-        toast({
-          title: "Short value is already taken",
+        toast.error("Short value is already taken", {
           description: "Use another value or generate one",
-          variant: "destructive",
         });
         form.setError("shortValue", {
           message: "Short value is already taken",
@@ -134,7 +114,7 @@ const CreateLinkModal = ({
         onClose();
       }}
     >
-      <DialogContent className="border-border">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create short link</DialogTitle>
           <DialogDescription>
@@ -143,12 +123,15 @@ const CreateLinkModal = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(formSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(formSubmit)}
+            className="space-y-4 flex-1"
+          >
             <FormField
               control={form.control}
               name="shortValue"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex-1">
                   <FormLabel className="flex items-center">
                     Short value (required){" "}
                     <BasicTooltip text="Used to replace long URL addresses with more compact ones, making it easier to share and improving the aesthetics of the links.">
@@ -178,9 +161,9 @@ const CreateLinkModal = ({
                   </FormControl>
                   {form.getValues("shortValue")?.length >= 4 &&
                     !form.formState.errors.shortValue && (
-                      <FormDescription className="flex items-center">
+                      <FormDescription className="flex items-center flex-1">
                         <Link2 className="h-4 w-4 mr-2" />
-                        <p>
+                        <p className="truncate flex-1">
                           <span>{origin}/l/</span>
                           {form.getValues("shortValue")}
                         </p>
@@ -261,9 +244,7 @@ const CreateLinkModal = ({
             Cancel
           </Button>
           <Button onClick={form.handleSubmit(formSubmit)} disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="h-4 w-4 mr-2 animate-spin" />
-            )}{" "}
+            {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}{" "}
             Create link
           </Button>
         </DialogFooter>

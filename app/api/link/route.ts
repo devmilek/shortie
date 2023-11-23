@@ -1,13 +1,14 @@
-import { currentProfile } from "@/lib/current-profile";
+import { authOptions } from "@/lib/auth-options";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
     const { longLink, password, expiresAt, shortValue } = await req.json();
-    const profile = await currentProfile();
 
-    if (!profile) {
+    if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
         longLink,
         password,
         expiresAt,
-        profileId: profile.id,
+        profileId: session.user.id,
       },
       include: {
         profile: true,

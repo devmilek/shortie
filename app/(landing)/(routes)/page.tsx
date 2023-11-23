@@ -1,9 +1,9 @@
-import Cta from "@/components/landing/cta";
-import Features from "@/components/landing/features";
-import Footer from "@/components/landing/footer";
-import Hero from "@/components/landing/hero";
-import Navbar from "@/components/landing/navbar";
-import Pricing from "@/components/landing/pricing";
+import Cta from "@/app/(landing)/_components/cta";
+import Features from "@/app/(landing)/_components/features";
+import Footer from "@/app/(landing)/_components/footer";
+import Hero from "@/app/(landing)/_components/hero";
+import Navbar from "@/app/(landing)/_components/navbar";
+import Pricing from "@/app/(landing)/_components/pricing";
 import Image from "next/image";
 
 export default function Home() {

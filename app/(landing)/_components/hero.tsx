@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 import dashboard from "@/assets/dashboard.png";
 import dashboard_dark from "@/assets/dashboard-dark.png";
-import { Button } from "../ui/button";
+import { Button } from "../../../components/ui/button";
 import { useTheme } from "next-themes";
 import ThemeImage from "./theme-image";
 

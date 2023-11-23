@@ -7,8 +7,6 @@ export async function POST(req: Request) {
 
     const visitor = linkId;
 
-    // console.log("[GEOLOCATION OF USER]", req.geo?.city);
-
     return NextResponse.json(visitor);
   } catch (error) {
     console.log("[SERVERS_POST]", error);

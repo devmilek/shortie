@@ -15,7 +15,7 @@ const NotFound = () => {
         </p>
         <div className="mt-4 space-x-2">
           <Button asChild variant="secondary">
-            <Link href="/app/dashboard">Dashboard</Link>
+            <Link href="/app/">Dashboard</Link>
           </Button>
           <Button asChild>
             <Link href="/">Go home</Link>

@@ -2,17 +2,14 @@ import { LinkIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { NavbarNav } from "./navbar-nav";
-import { Button } from "../ui/button";
-import {
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-} from "@clerk/nextjs";
-import { ThemeToggle } from "../theme-toggle";
+import { Button } from "../../../components/ui/button";
+import { ThemeToggle } from "../../../components/theme-toggle";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const session = await getServerSession(authOptions);
+
   return (
     <header className="border-b border-border backdrop-blur-md bg-white/50 dark:bg-black/50 fixed inset-x-0 top-0 z-50">
       <div className="max-w-7xl mx-auto px-8 flex items-center h-16">
@@ -23,22 +20,19 @@ const Navbar = () => {
         <NavbarNav />
         <div className="ml-auto space-x-2 flex items-center">
           <ThemeToggle />
-          <SignedIn>
-            <SignOutButton>
+          {session ? (
+            <>
               <Button variant="ghost">Sign out</Button>
-            </SignOutButton>
-            <Button>
-              <Link href={"/app"}>Dashboard</Link>
-            </Button>
-          </SignedIn>
-          <SignedOut>
-            <SignInButton>
+              <Button>
+                <Link href={"/app"}>Dashboard</Link>
+              </Button>
+            </>
+          ) : (
+            <div>
               <Button variant="outline">Sign In</Button>
-            </SignInButton>
-            <SignUpButton>
               <Button>Sign Up</Button>
-            </SignUpButton>
-          </SignedOut>
+            </div>
+          )}
         </div>
       </div>
     </header>

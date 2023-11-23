@@ -1,10 +1,10 @@
 import { Home, Link2, PieChart } from "lucide-react";
 
-export const SidebarNavItems = [
+export const sidebarNavItems = [
   {
     label: "Dashboard",
     icon: Home,
-    href: "/app/dashboard",
+    href: "/app/",
     isPro: false,
   },
   {
