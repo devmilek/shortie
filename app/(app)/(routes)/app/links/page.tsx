@@ -20,12 +20,11 @@ export default async function Page() {
           visitors: true,
         },
       },
-      profile: true,
     },
   });
 
   return (
-    <div className="p-6 pt-16">
+    <div className="p-6">
       <DataTable data={links} />
     </div>
   );

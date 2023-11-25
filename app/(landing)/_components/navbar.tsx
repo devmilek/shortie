@@ -28,10 +28,10 @@ const Navbar = async () => {
               </Button>
             </>
           ) : (
-            <div>
+            <>
               <Button variant="outline">Sign In</Button>
               <Button>Sign Up</Button>
-            </div>
+            </>
           )}
         </div>
       </div>

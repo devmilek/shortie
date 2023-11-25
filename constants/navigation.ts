@@ -4,7 +4,7 @@ export const sidebarNavItems = [
   {
     label: "Dashboard",
     icon: Home,
-    href: "/app/",
+    href: "/app",
     isPro: false,
   },
   {

@@ -14,7 +14,7 @@ interface BasicTooltipProps {
 const BasicTooltip = ({ children, text }: BasicTooltipProps) => {
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip delayDuration={1}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent className="max-w-[300px]">
           <p>{text}</p>

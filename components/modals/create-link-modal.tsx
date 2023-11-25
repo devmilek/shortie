@@ -35,24 +35,21 @@ import { LinkWithProfile } from "@/types";
 import { useLastCreatedLink } from "@/hooks/use-last-created-link";
 import { Icons } from "../icons";
 import { toast } from "sonner";
-
-interface CreateLinkModalProps {
-  longLink?: string;
-}
+import { useCreateLinkModal } from "@/hooks/use-create-link-modal";
 
 const formSchema = z.object({
   shortValue: z.string().min(4, {
     message: "Short value require at least 4 characters",
   }),
-  longLink: z.string().url({
+  destination: z.string().url({
     message: "Enter valid link",
   }),
   password: z.string().optional(),
   expiresAt: z.date().optional(),
 });
 
-const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
-  const { isOpen, onClose, type } = useModal();
+const CreateLinkModal = () => {
+  const { isOpen, onClose } = useCreateLinkModal();
   const origin = useOrigin();
   const router = useRouter();
   const { setLink } = useLastCreatedLink();
@@ -60,13 +57,12 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      longLink: longLink || "",
-      password: undefined,
+      shortValue: "",
+      destination: "",
+      password: "",
       expiresAt: undefined,
     },
   });
-
-  const isModalOpen = isOpen && type === "createLinkModal";
 
   const isLoading = form.formState.isSubmitting;
 
@@ -108,13 +104,13 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
 
   return (
     <Dialog
-      open={isModalOpen}
+      open={isOpen}
       onOpenChange={() => {
         form.reset();
         onClose();
       }}
     >
-      <DialogContent>
+      <DialogContent className="min-w-0">
         <DialogHeader>
           <DialogTitle>Create short link</DialogTitle>
           <DialogDescription>
@@ -124,8 +120,9 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
         </DialogHeader>
         <Form {...form}>
           <form
+            autoComplete="off"
             onSubmit={form.handleSubmit(formSubmit)}
-            className="space-y-4 flex-1"
+            className="space-y-4"
           >
             <FormField
               control={form.control}
@@ -133,7 +130,7 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="flex items-center">
-                    Short value (required){" "}
+                    Short value*
                     <BasicTooltip text="Used to replace long URL addresses with more compact ones, making it easier to share and improving the aesthetics of the links.">
                       <HelpCircle className="w-4 h-4 ml-2" />
                     </BasicTooltip>
@@ -141,6 +138,13 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
                   <FormControl>
                     <div className="flex space-x-2">
                       <Input
+                        readOnly
+                        value={origin + "/"}
+                        disabled
+                        className="w-min"
+                      />
+                      <Input
+                        autoComplete="off"
                         placeholder="Enter short value..."
                         {...field}
                         disabled={isLoading}
@@ -159,28 +163,19 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
                       </Button>
                     </div>
                   </FormControl>
-                  {form.getValues("shortValue")?.length >= 4 &&
-                    !form.formState.errors.shortValue && (
-                      <FormDescription className="flex items-center flex-1">
-                        <Link2 className="h-4 w-4 mr-2" />
-                        <p className="truncate flex-1">
-                          <span>{origin}/l/</span>
-                          {form.getValues("shortValue")}
-                        </p>
-                      </FormDescription>
-                    )}
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="longLink"
+              name="destination"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Long link (required)</FormLabel>
+                  <FormLabel>Destination*</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       placeholder="Enter long link..."
                       {...field}
                       disabled={isLoading}
@@ -190,6 +185,16 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
                 </FormItem>
               )}
             />
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Optional
+                </span>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               <FormField
                 control={form.control}
@@ -221,6 +226,7 @@ const CreateLinkModal = ({ longLink }: CreateLinkModalProps) => {
                     <FormControl>
                       <Input
                         type="password"
+                        autoComplete="off"
                         placeholder="Enter password..."
                         {...field}
                         disabled={isLoading}

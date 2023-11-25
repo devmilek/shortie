@@ -10,6 +10,8 @@ import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import LinkDetails from "../link-details";
 import { ScrollArea } from "../ui/scroll-area";
+import Image from "next/image";
+import { Badge } from "../ui/badge";
 
 const DashboardLinkCard = ({
   link,
@@ -21,26 +23,35 @@ const DashboardLinkCard = ({
   const origin = useOrigin();
   return (
     <div className="space-y-4 p-6 border rounded-xl shadow border-border">
-      <div>
-        <Link
-          href={origin + "/l/" + link.shortValue}
-          className="text-lg font-semibold group block truncate"
-          target="_blank"
-        >
-          <span className="text-blue-600 group-hover:underline transition">
-            {origin}/
-          </span>
-          <span className="group-hover:underline transition">
-            l/{link.shortValue}
-          </span>
-        </Link>
-        <Link
-          target="_blank"
-          href={link.longLink}
-          className="text-sm text-muted-foreground mt-1 hover:underline transition block truncate"
-        >
-          {link.longLink}
-        </Link>
+      <div className="flex space-x-4 items-center">
+        <img
+          height={20}
+          width={20}
+          className="w-10 h-10"
+          alt="Favicon"
+          src={`https://www.google.com/s2/favicons?domain=${link.destination}&sz=64`}
+        />
+        <div className="flex-1 min-w-0">
+          <Link
+            href={origin + "/l/" + link.shortValue}
+            className="text-lg font-semibold group block truncate"
+            target="_blank"
+          >
+            <span className="text-blue-600 group-hover:underline transition">
+              {origin}/
+            </span>
+            <span className="group-hover:underline transition">
+              l/{link.shortValue}
+            </span>
+          </Link>
+          <Link
+            target="_blank"
+            href={link.destination}
+            className="text-sm text-muted-foreground mt-1 hover:underline transition block truncate"
+          >
+            {link.destination}
+          </Link>
+        </div>
       </div>
       <Separator />
       <div className="flex items-center justify-between">
@@ -49,18 +60,9 @@ const DashboardLinkCard = ({
           <p className="text-sm">{formatDateString(link.createdAt)}</p>
         </div>
         <div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="secondary">
-                <Info className="h-4 w-4 mr-2" /> See details
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="px-0">
-              <ScrollArea className="h-screen pb-10">
-                <LinkDetails className="px-6 py-6" link={link} />
-              </ScrollArea>
-            </SheetContent>
-          </Sheet>
+          <Button variant="secondary">
+            <Info className="h-4 w-4 mr-2" /> See statistics
+          </Button>
         </div>
       </div>
     </div>

@@ -6,6 +6,12 @@ export type LinkWithProfile = Link & {
   profile: Profile;
 };
 
+export type LinkWithVisitorsCount = Link & {
+  _count: {
+    visitors: number;
+  };
+};
+
 export interface Feature {
   id: number;
   slug: string;

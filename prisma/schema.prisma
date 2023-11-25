@@ -26,8 +26,8 @@ model Profile {
 model Link {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  shortValue String @unique @default(uuid())
-  longLink   String
+  shortValue  String @unique @default(uuid())
+  destination String
 
   expiresAt DateTime?
   password  String?

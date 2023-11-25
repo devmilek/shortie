@@ -1,20 +1,16 @@
 import { LucideProps } from "lucide-react";
 import React, { ComponentType } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface DashboardStatsCardProps {
+interface StatsCardProps {
   paragraph: string;
   header: string;
   Icon: ComponentType<LucideProps>;
 }
 
-const DashboardStatsCard = ({
-  paragraph,
-  header,
-  Icon,
-}: DashboardStatsCardProps) => {
+const StatsCard = ({ paragraph, header, Icon }: StatsCardProps) => {
   return (
-    <Card className="border-border">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {paragraph}
@@ -28,4 +24,4 @@ const DashboardStatsCard = ({
   );
 };
 
-export default DashboardStatsCard;
+export default StatsCard;

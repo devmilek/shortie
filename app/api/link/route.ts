@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    const { longLink, password, expiresAt, shortValue } = await req.json();
+    const { destination, password, expiresAt, shortValue } = await req.json();
 
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     const link = await db.link.create({
       data: {
         shortValue,
-        longLink,
+        destination,
         password,
         expiresAt,
         profileId: session.user.id,
