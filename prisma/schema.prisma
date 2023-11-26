@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -26,7 +27,7 @@ model Profile {
 model Link {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  shortValue  String @unique @default(uuid())
+  shortValue  String @unique
   destination String
 
   expiresAt DateTime?

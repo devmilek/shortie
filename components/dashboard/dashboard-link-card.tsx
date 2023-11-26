@@ -7,11 +7,6 @@ import { AlertCircle, AlertOctagon, Clock, Info } from "lucide-react";
 import { formatDateString } from "@/lib/format-date";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import LinkDetails from "../link-details";
-import { ScrollArea } from "../ui/scroll-area";
-import Image from "next/image";
-import { Badge } from "../ui/badge";
 
 const DashboardLinkCard = ({
   link,
