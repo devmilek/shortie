@@ -17,11 +17,11 @@ export async function POST(
   try {
     const body = await req.json();
 
-    const { city } = geolocation(req);
+    const geo = geolocation(req);
 
-    console.log("[SERVERS_POST]", body, city);
+    console.log("[SERVERS_POST]", body, geo);
 
-    return NextResponse.json({ city });
+    return NextResponse.json({ ...geo });
   } catch (error) {
     console.log("[SERVERS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
