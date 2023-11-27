@@ -67,9 +67,6 @@ const CreateLinkModal = () => {
     if (data) {
       form.setValue("shortValue", data.shortValue);
       form.setValue("destination", data.destination);
-      if (data.password) {
-        form.setValue("password", data.password);
-      }
       if (data.expiresAt) {
         form.setValue("expiresAt", data.expiresAt);
       }
