@@ -12,7 +12,7 @@ const SearchInput = () => {
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
-
+    params.set("page", "1");
     if (term) {
       params.set("query", term);
     } else {
@@ -31,11 +31,6 @@ const SearchInput = () => {
         placeholder="Search by destination or short code"
         defaultValue={searchParams.get("query")?.toString()}
       />
-      <p>
-        {process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
-          ? "https://app.dub.co"
-          : "dupa"}
-      </p>
     </>
   );
 };

@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogHeader,
-  DialogTrigger,
   DialogFooter,
 } from "../ui/dialog";
 import { useForm } from "react-hook-form";
@@ -25,22 +24,23 @@ import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "../ui/button";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { HelpCircle, Link2, Loader2, RefreshCcw } from "lucide-react";
+import axios from "axios";
+import { HelpCircle, Loader2, RefreshCcw } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
 import BasicTooltip from "../ui/basic-tooltip";
 import { useRouter } from "next/navigation";
-import { useModal } from "@/hooks/use-modal-store";
-import { LinkWithProfile } from "@/types";
-import { useLastCreatedLink } from "@/hooks/use-last-created-link";
-import { Icons } from "../icons";
 import { toast } from "sonner";
 import { useCreateLinkModal } from "@/hooks/use-create-link-modal";
 
 const formSchema = z.object({
-  shortValue: z.string().min(4, {
-    message: "Short value require at least 4 characters",
-  }),
+  shortValue: z
+    .string()
+    .min(4, {
+      message: "Short value require at least 4 characters",
+    })
+    .regex(/^[a-zA-Z0-9\-_]+$/, {
+      message: 'Short value can only contain letters, numbers, "-" and "_"',
+    }),
   destination: z.string().url({
     message: "Enter valid link",
   }),
@@ -49,10 +49,9 @@ const formSchema = z.object({
 });
 
 const CreateLinkModal = () => {
-  const { isOpen, onClose } = useCreateLinkModal();
+  const { isOpen, onClose, data } = useCreateLinkModal();
   const origin = useOrigin();
   const router = useRouter();
-  const { setLink } = useLastCreatedLink();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,12 +63,30 @@ const CreateLinkModal = () => {
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      form.setValue("shortValue", data.shortValue);
+      form.setValue("destination", data.destination);
+      if (data.password) {
+        form.setValue("password", data.password);
+      }
+      if (data.expiresAt) {
+        form.setValue("expiresAt", data.expiresAt);
+      }
+    } else {
+      form.setValue("expiresAt", undefined);
+    }
+  }, [data, form]);
+
   const isLoading = form.formState.isSubmitting;
 
   async function formSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const linkResponse = await axios.post("/api/link", values);
-      setLink(linkResponse.data);
+      if (data) {
+        await axios.patch(`/api/link/${data.id}`, values);
+      } else {
+        await axios.post("/api/link", values);
+      }
       onClose();
       form.reset();
       toast.success("Link created", {
@@ -112,10 +129,13 @@ const CreateLinkModal = () => {
     >
       <DialogContent className="min-w-0">
         <DialogHeader>
-          <DialogTitle>Create short link</DialogTitle>
+          <DialogTitle>
+            {data ? "Edit short link" : "Create short link"}
+          </DialogTitle>
           <DialogDescription>
             If you want, you can password protect your link or set an expiration
             date.
+            {/* {JSON.stringify(data)} */}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -251,7 +271,7 @@ const CreateLinkModal = () => {
           </Button>
           <Button onClick={form.handleSubmit(formSubmit)} disabled={isLoading}>
             {isLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}{" "}
-            Create link
+            {data ? "Edit link" : "Create link"}
           </Button>
         </DialogFooter>
       </DialogContent>

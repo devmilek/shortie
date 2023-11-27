@@ -2,6 +2,7 @@ import { authOptions } from "@/lib/auth-options";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
@@ -18,6 +19,12 @@ export async function POST(req: Request) {
       },
     });
 
+    let hashedPassword = undefined;
+
+    if (password) {
+      hashedPassword = bcrypt.hashSync(password, 10);
+    }
+
     if (shortValueTaken) {
       return new NextResponse("Short value already taken", { status: 400 });
     }
@@ -26,7 +33,7 @@ export async function POST(req: Request) {
       data: {
         shortValue,
         destination,
-        password,
+        hashedPassword,
         expiresAt,
         profileId: session.user.id,
       },

@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 import PasswordLink from "@/components/password-link";
+import Test from "./_components/test";
 
 interface PageProps {
   params: {
@@ -20,11 +21,13 @@ const Page = async ({ params }: PageProps) => {
     return notFound();
   }
 
-  const visitor = await db.visitor.create({
-    data: {
-      LinkId: link.id,
-    },
-  });
+  Test();
+
+  // const visitor = await db.visitor.create({
+  //   data: {
+  //     LinkId: link.id,
+  //   },
+  // });
 
   const now = new Date();
 
@@ -32,20 +35,13 @@ const Page = async ({ params }: PageProps) => {
     return notFound();
   }
 
-  if (link.password) {
-    return <PasswordLink longLink={link.longLink} password={link.password} />;
+  if (link.hashedPassword) {
+    return <PasswordLink linkId={link.id} />;
   }
 
   if (link) {
-    return redirect(link.longLink);
+    return redirect(link.destination);
   }
-
-  return (
-    <div>
-      <h1 className="text-3xl font-bold">{params.shortValue}</h1>
-      {/* <p>{JSON.stringify(link)}</p> */}
-    </div>
-  );
 };
 
 export default Page;

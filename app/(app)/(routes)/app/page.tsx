@@ -32,9 +32,18 @@ const page = async () => {
   const mostPopularLinks = await db.link.findMany({
     where: {
       profileId: session.user.id,
-      expiresAt: {
-        gte: new Date(),
-      },
+      // OR: [
+      //   {
+      //     expiresAt: {
+      //       gte: new Date(),
+      //     },
+      //   },
+      //   {
+      //     expiresAt: {
+      //       equals: null,
+      //     },
+      //   },
+      // ],
     },
     orderBy: {
       visitors: {
@@ -43,6 +52,11 @@ const page = async () => {
     },
     include: {
       profile: true,
+      _count: {
+        select: {
+          visitors: true,
+        },
+      },
     },
     take: 3,
   });

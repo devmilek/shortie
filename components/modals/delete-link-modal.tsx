@@ -13,7 +13,6 @@ import {
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 import axios from "axios";
-import { useLastCreatedLink } from "@/hooks/use-last-created-link";
 import { Icons } from "../icons";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,7 +20,6 @@ import { useRouter } from "next/navigation";
 const DeleteLinkModal = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setLink } = useLastCreatedLink();
   const { isOpen, onClose, type, data } = useModal();
   const { link } = data;
   const isModalOpen = isOpen && type === "deleteLinkModal";
@@ -33,7 +31,6 @@ const DeleteLinkModal = () => {
       const deletedLink = await axios.delete(
         "/api/link/" + data.link?.shortValue
       );
-      setLink(null);
       router.refresh();
       onClose();
     } catch (e) {

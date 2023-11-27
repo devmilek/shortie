@@ -5,22 +5,23 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { redirect } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface PasswordLinkProps {
-  longLink: string;
-  password: string;
+  linkId: string;
 }
 
-const PasswordLink = ({ longLink, password }: PasswordLinkProps) => {
-  const [passwordModel, setPasswordModel] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const onSubmit = () => {
-    if (passwordModel !== password) {
-      setErrorMsg("Invalid password");
-    } else {
-      setErrorMsg("");
-      location.replace(longLink);
+const PasswordLink = ({ linkId }: PasswordLinkProps) => {
+  const [password, setPassword] = useState("");
+  const onSubmit = async () => {
+    try {
+      const res = await axios.post(`/api/link/${linkId}/authenticate`, {
+        password,
+      });
+      location.replace(res.data);
+    } catch (e: any) {
+      toast.error(e.response.data);
     }
   };
 
@@ -38,14 +39,14 @@ const PasswordLink = ({ longLink, password }: PasswordLinkProps) => {
         <div className="flex space-x-2 mt-4">
           <Input
             onChange={(e) => {
-              setPasswordModel(e.target.value);
+              setPassword(e.target.value);
             }}
+            type="password"
             placeholder="Enter password..."
             onSubmit={onSubmit}
           />
           <Button onClick={onSubmit}>Continue</Button>
         </div>
-        <p className="text-start text-sm text-red-700 mt-4">{errorMsg}</p>
       </div>
     </div>
   );

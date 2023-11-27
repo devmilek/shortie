@@ -3,41 +3,43 @@
 import { useOrigin } from "@/hooks/use-origin";
 import { Link as LinkType, Profile } from "@prisma/client";
 import { Separator } from "../ui/separator";
-import { AlertCircle, AlertOctagon, Clock, Info } from "lucide-react";
+import {
+  AlertCircle,
+  AlertOctagon,
+  ChevronRight,
+  Clock,
+  Info,
+  Pointer,
+} from "lucide-react";
 import { formatDateString } from "@/lib/format-date";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { BlurImage } from "../blur-image";
+import { getApexDomain } from "@/utils/get-apex-domain";
+import { GOOGLE_FAVICON_URL } from "@/constants";
+import { getShortLink } from "@/utils/get-short-link";
+import { LinkWithVisitorsCount } from "@/types";
 
-const DashboardLinkCard = ({
-  link,
-}: {
-  link: LinkType & {
-    profile: Profile;
-  };
-}) => {
+const DashboardLinkCard = ({ link }: { link: LinkWithVisitorsCount }) => {
   const origin = useOrigin();
+  const apexDomain = getApexDomain(link.destination);
   return (
     <div className="space-y-4 p-6 border rounded-xl shadow border-border">
       <div className="flex space-x-4 items-center">
-        <img
-          height={20}
+        <BlurImage
+          src={`${GOOGLE_FAVICON_URL}${apexDomain}`}
+          alt={apexDomain}
+          className="h-8 w-8 rounded-full sm:h-10 sm:w-10"
           width={20}
-          className="w-10 h-10"
-          alt="Favicon"
-          src={`https://www.google.com/s2/favicons?domain=${link.destination}&sz=64`}
+          height={20}
         />
         <div className="flex-1 min-w-0">
           <Link
-            href={origin + "/l/" + link.shortValue}
-            className="text-lg font-semibold group block truncate"
+            href={getShortLink(link.shortValue, false)}
+            className="text-lg font-semibold group block truncate text-primary hover:underline transition-all"
             target="_blank"
           >
-            <span className="text-blue-600 group-hover:underline transition">
-              {origin}/
-            </span>
-            <span className="group-hover:underline transition">
-              l/{link.shortValue}
-            </span>
+            {getShortLink(link.shortValue, true)}
           </Link>
           <Link
             target="_blank"
@@ -50,13 +52,19 @@ const DashboardLinkCard = ({
       </div>
       <Separator />
       <div className="flex items-center justify-between">
-        <div className="flex items-center text-muted-foreground">
-          <Clock className="w-4 h-4 mr-2" />
-          <p className="text-sm">{formatDateString(link.createdAt)}</p>
+        <div className="flex space-x-4">
+          <div className="flex items-center text-muted-foreground">
+            <Clock className="w-4 h-4 mr-2" />
+            <p className="text-sm">{formatDateString(link.createdAt)}</p>
+          </div>
+          <div className="flex items-center text-muted-foreground">
+            <Pointer className="w-4 h-4 mr-2" />
+            <p className="text-sm">Clicks: {link._count.visitors}</p>
+          </div>
         </div>
         <div>
           <Button variant="secondary">
-            <Info className="h-4 w-4 mr-2" /> See statistics
+            See details <ChevronRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </div>

@@ -30,8 +30,8 @@ model Link {
   shortValue  String @unique
   destination String
 
-  expiresAt DateTime?
-  password  String?
+  expiresAt      DateTime?
+  hashedPassword String?
 
   profile   Profile @relation(fields: [profileId], references: [id])
   profileId String  @db.ObjectId
