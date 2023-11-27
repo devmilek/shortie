@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 import PasswordLink from "@/components/password-link";
-import Test from "./_components/test";
+import LinkLogic from "./_components/link-logic";
 
 interface PageProps {
   params: {
@@ -21,27 +21,14 @@ const Page = async ({ params }: PageProps) => {
     return notFound();
   }
 
-  Test();
-
-  // const visitor = await db.visitor.create({
-  //   data: {
-  //     LinkId: link.id,
-  //   },
-  // });
-
   const now = new Date();
 
-  if (link.expiresAt && link.expiresAt < now) {
-    return notFound();
-  }
-
-  if (link.hashedPassword) {
-    return <PasswordLink linkId={link.id} />;
-  }
-
-  if (link) {
-    return redirect(link.destination);
-  }
+  return (
+    <LinkLogic
+      linkId={link.id}
+      destination={link.hashedPassword ? "" : link.destination}
+    />
+  );
 };
 
 export default Page;
