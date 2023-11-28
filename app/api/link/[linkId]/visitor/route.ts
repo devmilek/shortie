@@ -1,8 +1,7 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { geolocation } from "@vercel/edge";
-
-export const runtime = "edge";
+import { getUserOS } from "@/utils/get-user-os";
 
 export async function POST(
   req: Request,
@@ -15,13 +14,18 @@ export async function POST(
   }
 ) {
   try {
-    const body = await req.json();
+    const { os, browserName, device } = await req.json();
 
-    const geo = geolocation(req);
+    await db.visitor.create({
+      data: {
+        browserName: browserName ? browserName : "unknown",
+        os: os ? os : "unknown",
+        device: device ? device : "unknown",
+        linkId: params.linkId,
+      },
+    });
 
-    console.log("[SERVERS_POST]", body, geo);
-
-    return NextResponse.json({ ...geo });
+    return NextResponse.json({});
   } catch (error) {
     console.log("[SERVERS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });

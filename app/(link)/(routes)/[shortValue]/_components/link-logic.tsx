@@ -14,30 +14,28 @@ interface LinkLogicProps {
 }
 
 const LinkLogic = ({ linkId, destination }: LinkLogicProps) => {
+  const visitorData = {
+    os: getUserOS(),
+    browserName: getUserBrowser(),
+    device: getUserDevice(),
+  };
+
   const { isLoading, error, data } = useQuery("repoData", {
     queryFn: async () => {
-      const res = await axios.post(`/api/link/${linkId}/visitor`, {
-        foo: "bar",
-      });
+      const res = await axios.post(`/api/link/${linkId}/visitor`, visitorData);
       return res.data;
     },
   });
-  //   const visitorData = {
-  //     os: getUserOS(),
-  //     browserName: getUserBrowser(),
-  //     device: getUserDevice(),
-  //   };
 
   useEffect(() => {});
   //   console.log(visitorData);
 
   if (!isLoading) {
-    return <div>{JSON.stringify(data)}</div>;
+    if (!destination) {
+      return <PasswordLink linkId={linkId} />;
+    }
+    location.replace(destination);
   }
-  //   if (!destination) {
-  //     return <PasswordLink linkId={linkId} />;
-  //   }
-  //   location.replace(destination);
 };
 
 export default LinkLogic;

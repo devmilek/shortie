@@ -45,8 +45,8 @@ model Link {
 model Visitor {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  link   Link   @relation(references: [id], fields: [LinkId])
-  LinkId String @db.ObjectId
+  link   Link   @relation(references: [id], fields: [linkId])
+  linkId String @db.ObjectId
 
   browserName String
   device      String
