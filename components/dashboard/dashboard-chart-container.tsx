@@ -24,13 +24,7 @@ const DashboardChartContainer = async ({ profileId }: DashboardChartProps) => {
     },
   });
 
-  return (
-    <div
-      className={cn("pl-0 p-6 rounded-xl border shadow bg-background flex-1")}
-    >
-      <DashboardChart visitors={clicks} />
-    </div>
-  );
+  return <DashboardChart visitors={clicks} />;
 };
 
 export default DashboardChartContainer;
