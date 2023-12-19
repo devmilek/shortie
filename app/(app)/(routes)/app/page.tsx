@@ -76,6 +76,7 @@ const page = async () => {
     <div className="flex min-h-full">
       <section className="p-9 w-full">
         {/* Statisctic cards */}
+        hello
         <div className="flex w-full gap-x-6">
           <DashboardChart className="flex-1" clicks={clicks} />
           <div className="grid gap-4 w-96">
