@@ -20,6 +20,7 @@ const page = async () => {
     <div className="flex min-h-full">
       <section className="p-9 w-full">
         {/* Statisctic cards */}
+        hellod
         <div className="flex w-full gap-x-6">
           <DashboardChartContainer profileId={session.user.id} />
           <div className="grid gap-4 w-96">
