@@ -1,9 +1,11 @@
 import * as React from "react";
+import { DataTable } from "@/components/links/data-table";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import SearchInput from "./_components/search-input";
+import LinkCard from "./_components/link-card";
 import Pagination from "@/components/pagination";
 import { ITEMS_PER_PAGE } from "@/constants";
 import LinksFeed from "./_components/links-feed";

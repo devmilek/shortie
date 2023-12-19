@@ -19,12 +19,12 @@ import { getApexDomain } from "@/utils/get-apex-domain";
 import { GOOGLE_FAVICON_URL } from "@/constants";
 import { getShortLink } from "@/utils/get-short-link";
 import { LinkWithVisitorsCount } from "@/types";
-import { Card } from "../ui/card";
 
 const DashboardLinkCard = ({ link }: { link: LinkWithVisitorsCount }) => {
+  const origin = useOrigin();
   const apexDomain = getApexDomain(link.destination);
   return (
-    <Card className="space-y-4 p-6 border rounded-xl shadow border-border">
+    <div className="space-y-4 p-6 border rounded-xl shadow border-border">
       <div className="flex space-x-4 items-center">
         <BlurImage
           src={`${GOOGLE_FAVICON_URL}${apexDomain}`}
@@ -68,7 +68,7 @@ const DashboardLinkCard = ({ link }: { link: LinkWithVisitorsCount }) => {
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

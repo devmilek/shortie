@@ -1,7 +1,8 @@
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { geolocation } from "@vercel/edge";
-import { getUserOS } from "@/utils/get-user-os";
+
+export const runtime = "edge";
 
 export async function POST(
   req: Request,
@@ -14,11 +15,11 @@ export async function POST(
   }
 ) {
   try {
-    const { os, browserName, device } = await req.json();
+    const body = await req.json();
 
     const geo = geolocation(req);
 
-    console.log("[SERVERS_POST]", body, city);
+    console.log("[SERVERS_POST]", body, geo);
 
     return NextResponse.json({ ...geo });
   } catch (error) {
