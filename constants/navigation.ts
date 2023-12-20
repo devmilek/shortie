@@ -7,12 +7,12 @@ export const sidebarNavItems = [
     href: "/app",
     isPro: false,
   },
-  {
-    label: "Statistics",
-    icon: PieChart,
-    href: "/app/statistics",
-    isPro: true,
-  },
+  // {
+  //   label: "Statistics",
+  //   icon: PieChart,
+  //   href: "/app/statistics",
+  //   isPro: true,
+  // },
   {
     label: "Links",
     icon: Link2,

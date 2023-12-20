@@ -6,7 +6,6 @@ import { Toaster } from "sonner";
 
 const ToasterProvider = () => {
   const { theme } = useTheme();
-  console.log(theme);
   return (
     <Toaster
       richColors

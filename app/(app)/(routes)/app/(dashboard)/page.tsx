@@ -1,12 +1,16 @@
-import DashboardChart from "@/components/dashboard/dashboard-chart";
-import StatsCard from "@/app/(app)/(routes)/app/_components/stats-card";
+import StatsCard from "@/app/(app)/(routes)/app/(dashboard)/_components/stats-card";
 import { authOptions } from "@/lib/auth-options";
 import { db } from "@/lib/db";
 import { Link2, Pointer } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import React from "react";
-import MostClickedLinks from "./_components/most-clicked-links";
+import React, { Suspense } from "react";
+import {
+  MostClickedLinks,
+  MostClickedLinksSkeleton,
+} from "./_components/most-clicked-links";
+import CreateLinkButton from "@/components/create-link-button";
+import DashboardChart from "@/app/(app)/(routes)/app/(dashboard)/_components/dashboard-chart";
 
 const page = async () => {
   const session = await getServerSession(authOptions);
@@ -29,38 +33,6 @@ const page = async () => {
     },
   });
 
-  const mostPopularLinks = await db.link.findMany({
-    where: {
-      profileId: session.user.id,
-      // OR: [
-      //   {
-      //     expiresAt: {
-      //       gte: new Date(),
-      //     },
-      //   },
-      //   {
-      //     expiresAt: {
-      //       equals: null,
-      //     },
-      //   },
-      // ],
-    },
-    orderBy: {
-      visitors: {
-        _count: "desc",
-      },
-    },
-    include: {
-      profile: true,
-      _count: {
-        select: {
-          visitors: true,
-        },
-      },
-    },
-    take: 3,
-  });
-
   const clicks = await db.visitor.findMany({
     where: {
       link: {
@@ -73,10 +45,10 @@ const page = async () => {
   });
 
   return (
-    <div className="flex min-h-full">
+    <div className="flex min-h-full relative">
       <section className="p-9 w-full">
         {/* Statisctic cards */}
-        <div className="flex w-full gap-x-6">
+        <div className="flex w-full gap-x-6 mb-8">
           <DashboardChart className="flex-1" clicks={clicks} />
           <div className="grid gap-4 w-96">
             <StatsCard
@@ -92,8 +64,20 @@ const page = async () => {
           </div>
         </div>
         {/* Popular Links header */}
-        <MostClickedLinks links={mostPopularLinks} />
+        <Suspense fallback={<MostClickedLinksSkeleton />}>
+          <MostClickedLinks />
+        </Suspense>
       </section>
+      {countLinks === 0 && (
+        <div className="h-full w-full inset-x-0 inset-y-0 absolute bg-white/10 backdrop-blur-md flex items-center justify-center">
+          <div className="p-4 bg-background border rounded-lg flex flex-col items-center justify-center container max-w-sm">
+            <h1 className="text-xl font-semibold mb-4">
+              You havent created any links
+            </h1>
+            <CreateLinkButton />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

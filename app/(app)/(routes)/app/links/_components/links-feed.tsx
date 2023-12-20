@@ -1,11 +1,11 @@
 import { Link } from "@prisma/client";
 import React from "react";
-import LinkCard from "./link-card";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth-options";
 import { ITEMS_PER_PAGE } from "@/constants";
+import { LinkCard, LinkCardSkeleton } from "./link-card";
 
 interface LinksFeedProps {
   query: string;
@@ -46,7 +46,6 @@ const LinksFeed = async ({ query, currentPage }: LinksFeedProps) => {
     take: ITEMS_PER_PAGE,
     skip: offset,
   });
-
   return (
     <>
       {links.map((link) => (
@@ -56,4 +55,14 @@ const LinksFeed = async ({ query, currentPage }: LinksFeedProps) => {
   );
 };
 
-export default LinksFeed;
+const LinksFeedSkeleton = () => {
+  return (
+    <>
+      {[...Array(3)].map((_, i) => (
+        <LinkCardSkeleton key={i} />
+      ))}
+    </>
+  );
+};
+
+export { LinksFeed, LinksFeedSkeleton };
